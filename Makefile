@@ -11,6 +11,7 @@ obj-y	+= motors/
 obj-y	+= pistorms/
 obj-y	+= sensors/
 obj-y	+= wedo/
+obj-y   += modbrick/
 
 obj-y	+= linux/
 obj-y	+= lms2012/
