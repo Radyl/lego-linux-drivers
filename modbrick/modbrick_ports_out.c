@@ -146,7 +146,7 @@ static int modbrick_out_port_run_unregulated(void *context, int duty_cycle)
 	else
 		data->duty_cycle = duty_cycle;
 
-	ret = ModBrick_Motor_Run_Unregulated(data->modbrick, data->index, (int) (data->duty_cycle * 1023 / 100) );
+	ret = ModBrick_Motor_Run_Unregulated(data->modbrick, data->index, (int) (duty_cycle * 1023 / 100) );
 
 	if (ret < 0)
 		return ret;
