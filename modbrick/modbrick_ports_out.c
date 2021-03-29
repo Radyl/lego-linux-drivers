@@ -242,7 +242,7 @@ static int modbrick_out_port_get_speed(void *context, int *speed)
 	struct modbrick_out_port *data = context;
     int ret;
 	
-    uint16_t sp;
+    int16_t sp;
 
 	ret = ModBrick_Motor_GetInfo( data->modbrick, data->index, NULL, NULL, &sp, NULL);
     
