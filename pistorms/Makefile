@@ -1,3 +1,6 @@
+
+ccflags-y += -I $(srctree)/drivers/lego/include
+
 # mindsensors.com PiStorms
 
 pistorms-objs := pistorms_core.o pistorms_battery.o pistorms_input.o pistorms_leds.o \

@@ -1,7 +1,5 @@
 # Makefile for LEGO device drivers
 
-KBUILD_CFLAGS += -I$(src)/include
-
 obj-y	+= brickpi/
 obj-y	+= brickpi3/
 obj-y	+= core/
