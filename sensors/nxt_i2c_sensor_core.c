@@ -65,7 +65,7 @@ static bool allow_autodetect = 1;
 module_param(allow_autodetect, bool, 0644);
 MODULE_PARM_DESC(allow_autodetect, "Allow NXT I2C sensors to be automatically detected.");
 
-void nxt_i2c_sensor_poll_work(struct work_struct *work);
+static void nxt_i2c_sensor_poll_work(struct work_struct *work);
 
 static int nxt_i2c_sensor_set_mode(void *context, u8 mode)
 {
@@ -178,7 +178,7 @@ static int nxt_i2c_sensor_set_poll_ms(void *context, unsigned value)
 	return 0;
 }
 
-enum hrtimer_restart nxt_i2c_sensor_poll_timer(struct hrtimer *timer)
+static enum hrtimer_restart nxt_i2c_sensor_poll_timer(struct hrtimer *timer)
 {
 	struct nxt_i2c_sensor_data *data =
 		container_of(timer, struct nxt_i2c_sensor_data, poll_timer);
@@ -189,7 +189,7 @@ enum hrtimer_restart nxt_i2c_sensor_poll_timer(struct hrtimer *timer)
 	return HRTIMER_RESTART;
 }
 
-void nxt_i2c_sensor_poll_work(struct work_struct *work)
+static void nxt_i2c_sensor_poll_work(struct work_struct *work)
 {
 	struct nxt_i2c_sensor_data *data =
 		container_of(work, struct nxt_i2c_sensor_data, poll_work);
@@ -485,7 +485,7 @@ struct i2c_driver nxt_i2c_sensor_driver = {
 	.remove		= nxt_i2c_sensor_remove,
 	.class		= I2C_CLASS_LEGO,
 	.detect		= nxt_i2c_sensor_detect,
-	.address_list	= I2C_ADDRS(0x01, 0x02, 0x03, 0x08, 0x0a, 0x0c, 0x11, 0x15, 
+	.address_list	= I2C_ADDRS(0x01, 0x02, 0x03, 0x08, 0x0a, 0x0c, 0x11, 0x15,
 				    0x18, 0x4c, 0x50, 0x51, 0x52, 0x58),
 };
 module_i2c_driver(nxt_i2c_sensor_driver);

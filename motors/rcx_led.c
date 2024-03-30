@@ -45,7 +45,7 @@ static void rcx_led_brightness_set(struct led_classdev *led_cdev,
 	port->dc_motor_ops->set_duty_cycle(port->context, brightness);
 }
 
-enum led_brightness rcx_led_brightness_get(struct led_classdev *led_cdev)
+static enum led_brightness rcx_led_brightness_get(struct led_classdev *led_cdev)
 {
 	struct rcx_led_data *data =
 			container_of(led_cdev, struct rcx_led_data, cdev);

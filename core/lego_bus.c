@@ -58,7 +58,7 @@ struct lego_device *lego_device_register(const char *name,
 	if (!ldev)
 		return ERR_PTR(-ENOMEM);
 
-	/* 
+	/*
 	 * HACK: iio callback buffers are limited to one iio device. We have
 	 * two (ADC and tacho), so we have an extra device tree node for motors
 	 * on EV3 to have something to use to look up the tacho iio channel

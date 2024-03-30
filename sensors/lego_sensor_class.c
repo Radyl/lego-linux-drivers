@@ -553,10 +553,10 @@ static ssize_t text_value_show(struct device *dev, struct device_attribute *attr
 {
 	struct lego_sensor_device *sensor = to_lego_sensor_device(dev);
 	const char *value;
- 
+
 	if (!sensor->get_text_value)
 		return -EOPNOTSUPP;
- 
+
 	value = sensor->get_text_value(sensor->context);
 
 	if(IS_ERR(value))

@@ -564,9 +564,9 @@ struct tacho_motor_ops ms_nxtmmx_tacho_motor_ops = {
 	.set_hold_Kd		= ms_nxtmmx_set_position_Kd,
 };
 
-int ms_nxtmmx_out_port_register_motor(struct ms_nxtmmx_data *mmx,
-				      const struct device_type *device_type,
-				      const char *name)
+static int ms_nxtmmx_out_port_register_motor(struct ms_nxtmmx_data *mmx,
+					     const struct device_type *device_type,
+					     const char *name)
 {
 	struct lego_device *new_motor;
 
@@ -580,7 +580,7 @@ int ms_nxtmmx_out_port_register_motor(struct ms_nxtmmx_data *mmx,
 	return 0;
 }
 
-void ms_nxtmmx_out_port_unregister_motor(struct ms_nxtmmx_data *mmx)
+static void ms_nxtmmx_out_port_unregister_motor(struct ms_nxtmmx_data *mmx)
 {
 	if (mmx->motor) {
 		lego_device_unregister(mmx->motor);
@@ -599,13 +599,13 @@ static int ms_nxtmmx_out_port_set_mode(void *context, u8 mode)
 				ms_nxtmmx_out_port_default_driver[mode]);
 }
 
-void ms_nxtmmx_unregister_out_port(struct ms_nxtmmx_data *mmx)
+static void ms_nxtmmx_unregister_out_port(struct ms_nxtmmx_data *mmx)
 {
 	ms_nxtmmx_out_port_unregister_motor(mmx);
 	lego_port_unregister(&mmx->port);
 }
 
-int ms_nxtmmx_register_out_port(struct ms_nxtmmx_data *mmx)
+static int ms_nxtmmx_register_out_port(struct ms_nxtmmx_data *mmx)
 {
 	struct lego_port_device *port = &mmx->port;
 	int err;

@@ -151,9 +151,9 @@ static const struct lego_port_mode_info brickpi_in_port_mode_info[NUM_BRICKPI_IN
 	},
 };
 
-int brickpi_in_port_register_sensor(struct brickpi_in_port_data *in_port,
-				    const struct device_type *device_type,
-				    const char *name)
+static int brickpi_in_port_register_sensor(struct brickpi_in_port_data *in_port,
+					   const struct device_type *device_type,
+					   const char *name)
 {
 	struct lego_device *new_sensor;
 
@@ -177,7 +177,7 @@ int brickpi_in_port_register_sensor(struct brickpi_in_port_data *in_port,
 	return 0;
 }
 
-void brickpi_in_port_unregister_sensor(struct brickpi_in_port_data *in_port)
+static void brickpi_in_port_unregister_sensor(struct brickpi_in_port_data *in_port)
 {
 	if (in_port->sensor) {
 		lego_device_unregister(in_port->sensor);

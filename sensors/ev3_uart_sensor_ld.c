@@ -232,7 +232,7 @@ struct ev3_uart_port_data {
 	unsigned closing:1;
 };
 
-u8 ev3_uart_set_msg_hdr(u8 type, const unsigned long size, u8 cmd)
+static u8 ev3_uart_set_msg_hdr(u8 type, const unsigned long size, u8 cmd)
 {
 	u8 size_code = (find_last_bit(&size, sizeof(unsigned long)) & 0x7) << 3;
 
@@ -262,7 +262,7 @@ static inline int ev3_uart_msg_size(u8 header)
 	return size;
 }
 
-int ev3_uart_write_byte(struct tty_struct *tty, const u8 byte)
+static int ev3_uart_write_byte(struct tty_struct *tty, const u8 byte)
 {
 	int ret;
 
@@ -274,7 +274,7 @@ int ev3_uart_write_byte(struct tty_struct *tty, const u8 byte)
 	return ret;
 }
 
-int ev3_uart_set_mode(void *context, const u8 mode)
+static int ev3_uart_set_mode(void *context, const u8 mode)
 {
 	struct tty_struct *tty = context;
 	struct ev3_uart_port_data *port;
@@ -360,7 +360,7 @@ static ssize_t ev3_uart_direct_write(void *context, char *data, loff_t off,
 	return count;
 }
 
-int ev3_uart_match_input_port(struct device *dev, const void *data)
+static int ev3_uart_match_input_port(struct device *dev, const void *data)
 {
 	struct lego_port_device *pdev = to_lego_port_device(dev);
 	const char *tty_name = data;
@@ -434,7 +434,7 @@ static void ev3_uart_send_keep_alive(unsigned long data)
 	ev3_uart_write_byte(tty, EV3_UART_SYS_NACK);
 }
 
-enum hrtimer_restart ev3_uart_keep_alive_timer_callback(struct hrtimer *timer)
+static enum hrtimer_restart ev3_uart_keep_alive_timer_callback(struct hrtimer *timer)
 {
 	struct ev3_uart_port_data *port = container_of(timer,
 				struct ev3_uart_port_data, keep_alive_timer);

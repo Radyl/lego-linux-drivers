@@ -430,7 +430,7 @@ static int tm_do_one_ramp_step(struct tacho_motor_device *tm,
 /*
  * Set all parameters to the default values.
  */
-void tacho_motor_class_reset(struct tacho_motor_device *tm)
+static void tacho_motor_class_reset(struct tacho_motor_device *tm)
 {
 	tm->polarity			= DC_MOTOR_POLARITY_NORMAL;
 	tm->params.duty_cycle_sp	= 0;
@@ -474,8 +474,8 @@ static ssize_t position_show(struct device *dev, struct device_attribute *attr,
 	return sprintf(buf, "%d\n", position);
 }
 
-ssize_t position_store(struct device *dev, struct device_attribute *attr,
-		       const char *buf, size_t size)
+static ssize_t position_store(struct device *dev, struct device_attribute *attr,
+			      const char *buf, size_t size)
 {
 	struct tacho_motor_device *tm = to_tacho_motor(dev);
 	int err, position;
@@ -774,7 +774,7 @@ static ssize_t command_store(struct device *dev, struct device_attribute *attr,
 
 		if (supported_commands & BIT(i)) {
 			int err;
-			
+
 			err = tm_send_command(tm, i);
 			if (err < 0)
 				return err;

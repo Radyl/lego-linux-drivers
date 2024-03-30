@@ -161,7 +161,7 @@ const char *dc_motor_state_names[] = {
 	[DC_MOTOR_STATE_RAMPING]	= "ramping",
 };
 
-void dc_motor_class_start_motor_ramp(struct dc_motor_device *motor)
+static void dc_motor_class_start_motor_ramp(struct dc_motor_device *motor)
 {
 	unsigned long ramp_sp, now;
 

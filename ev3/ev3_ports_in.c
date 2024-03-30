@@ -207,7 +207,7 @@ static struct ev3_analog_id_resistor_info ev3_analog_id_resistor_infos[] = {
  * to_ev3_analog_sensor_type_id - converts id resistor mV value to a Type ID
  * @mv: The value to convert.
  */
-unsigned to_ev3_analog_sensor_type_id(int mv)
+static unsigned to_ev3_analog_sensor_type_id(int mv)
 {
 	enum ev3_analog_sensor_res_id res_id = NUM_EV3_RESISTOR_ID;
 
@@ -540,7 +540,7 @@ static void ev3_input_port_ev3_analog_cb(struct ev3_input_port_data *data)
 		data->port.notify_raw_data_func(data->port.notify_raw_data_context);
 }
 
-int ev3_input_port_enable_i2c(struct ev3_input_port_data *data, unsigned int class)
+static int ev3_input_port_enable_i2c(struct ev3_input_port_data *data, unsigned int class)
 {
 	int err;
 
@@ -558,7 +558,7 @@ int ev3_input_port_enable_i2c(struct ev3_input_port_data *data, unsigned int cla
 	return 0;
 }
 
-void ev3_input_port_disable_i2c(struct ev3_input_port_data *data)
+static void ev3_input_port_disable_i2c(struct ev3_input_port_data *data)
 {
 	/* NOP if ev3_input_port_enable_i2c() was not called */
 	if (!data->i2c_enabled)
@@ -571,7 +571,7 @@ void ev3_input_port_disable_i2c(struct ev3_input_port_data *data)
 	gpiod_set_value(data->buf_ena_gpio, 0);
 }
 
-int ev3_input_port_enable_uart(struct ev3_input_port_data *data)
+static int ev3_input_port_enable_uart(struct ev3_input_port_data *data)
 {
 	int err;
 
@@ -586,7 +586,7 @@ int ev3_input_port_enable_uart(struct ev3_input_port_data *data)
 	return 0;
 }
 
-void ev3_input_port_disable_uart(struct ev3_input_port_data *data)
+static void ev3_input_port_disable_uart(struct ev3_input_port_data *data)
 {
 	/* NOP if ev3_input_port_enable_uart() was not called */
 	if (!data->uart_enabled)
@@ -598,7 +598,7 @@ void ev3_input_port_disable_uart(struct ev3_input_port_data *data)
 	gpiod_set_value(data->buf_ena_gpio, 0);
 }
 
-void ev3_input_port_float(struct ev3_input_port_data *data)
+static void ev3_input_port_float(struct ev3_input_port_data *data)
 {
 	if (data->pin1_gpio)
 		gpiod_direction_output(data->pin1_gpio, 0);
@@ -609,7 +609,7 @@ void ev3_input_port_float(struct ev3_input_port_data *data)
 	gpiod_direction_output(data->buf_ena_gpio, 0);
 }
 
-void ev3_input_port_register_sensor(struct work_struct *work)
+static void ev3_input_port_register_sensor(struct work_struct *work)
 {
 	struct ev3_input_port_data *data =
 			container_of(work, struct ev3_input_port_data, work);
@@ -671,7 +671,7 @@ void ev3_input_port_register_sensor(struct work_struct *work)
 	return;
 }
 
-void ev3_input_port_unregister_sensor(struct work_struct *work)
+static void ev3_input_port_unregister_sensor(struct work_struct *work)
 {
 	struct ev3_input_port_data *data =
 			container_of(work, struct ev3_input_port_data, work);
@@ -684,7 +684,7 @@ void ev3_input_port_unregister_sensor(struct work_struct *work)
 	ev3_input_port_disable_uart(data);
 }
 
-void ev3_input_port_change_uevent_work(struct work_struct *work)
+static void ev3_input_port_change_uevent_work(struct work_struct *work)
 {
 	struct ev3_input_port_data *data =
 		container_of(work, struct ev3_input_port_data, change_uevent_work);
@@ -892,7 +892,7 @@ static enum hrtimer_restart ev3_input_port_timer_callback(struct hrtimer *timer)
 	return HRTIMER_RESTART;
 }
 
-int ev3_input_port_enable_raw_mode(struct ev3_input_port_data *data)
+static int ev3_input_port_enable_raw_mode(struct ev3_input_port_data *data)
 {
 	if (data->pin1_gpio)
 		gpiod_export(data->pin1_gpio, false);
@@ -905,7 +905,7 @@ int ev3_input_port_enable_raw_mode(struct ev3_input_port_data *data)
 	return 0;
 }
 
-void ev3_input_port_disable_raw_mode(struct ev3_input_port_data *data)
+static void ev3_input_port_disable_raw_mode(struct ev3_input_port_data *data)
 {
 	if (data->pin1_gpio)
 		gpiod_unexport(data->pin1_gpio);

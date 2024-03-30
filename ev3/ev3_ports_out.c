@@ -262,7 +262,7 @@ struct ev3_output_port_data {
 	struct dentry *debug;
 };
 
-int ev3_output_port_set_direction_gpios(struct ev3_output_port_data *data)
+static int ev3_output_port_set_direction_gpios(struct ev3_output_port_data *data)
 {
 	switch(data->command) {
 	case DC_MOTOR_INTERNAL_COMMAND_RUN_FORWARD:
@@ -333,7 +333,7 @@ static int ev3_output_port_set_duty_cycle(void *context, unsigned duty)
 	struct ev3_output_port_data *data = context;
 	struct pwm_state state;
 	int ret;
-	
+
 	pwm_get_state(data->pwm, &state);
 	ret = pwm_set_relative_duty_cycle(&state, duty, 100);
 	if (ret)
@@ -351,7 +351,7 @@ static struct dc_motor_ops ev3_output_port_motor_ops = {
 	.get_duty_cycle		= ev3_output_port_get_duty_cycle,
 };
 
-void ev3_output_port_float(struct ev3_output_port_data *data)
+static void ev3_output_port_float(struct ev3_output_port_data *data)
 {
 	gpiod_direction_output(data->pin1_gpio, 0);
 	gpiod_direction_output(data->pin2_gpio, 0);
@@ -361,7 +361,7 @@ void ev3_output_port_float(struct ev3_output_port_data *data)
 	data->command = DC_MOTOR_INTERNAL_COMMAND_COAST;
 }
 
-void ev3_output_port_change_uevent_work(struct work_struct *work)
+static void ev3_output_port_change_uevent_work(struct work_struct *work)
 {
 	struct ev3_output_port_data *data = container_of(work,
 			struct ev3_output_port_data, change_uevent_work);
@@ -369,7 +369,7 @@ void ev3_output_port_change_uevent_work(struct work_struct *work)
 	kobject_uevent(&data->out_port.dev.kobj, KOBJ_CHANGE);
 }
 
-void ev3_output_port_register_motor(struct work_struct *work)
+static void ev3_output_port_register_motor(struct work_struct *work)
 {
 	struct ev3_output_port_data *data =
 			container_of(work, struct ev3_output_port_data, work);
@@ -405,7 +405,7 @@ void ev3_output_port_register_motor(struct work_struct *work)
 	return;
 }
 
-void ev3_output_port_unregister_motor(struct work_struct *work)
+static void ev3_output_port_unregister_motor(struct work_struct *work)
 {
 	struct ev3_output_port_data *data =
 			container_of(work, struct ev3_output_port_data, work);
@@ -597,7 +597,7 @@ static enum hrtimer_restart ev3_output_port_timer_callback(struct hrtimer *timer
 	return HRTIMER_RESTART;
 }
 
-void ev3_output_port_enable_raw_mode(struct ev3_output_port_data *data)
+static void ev3_output_port_enable_raw_mode(struct ev3_output_port_data *data)
 {
 	/* TODO: would be nice to create symlinks from exported gpios to out_port */
 	gpiod_export(data->pin1_gpio, true);
@@ -608,7 +608,7 @@ void ev3_output_port_enable_raw_mode(struct ev3_output_port_data *data)
 	/* TODO: export pwm and iio */
 }
 
-void ev3_output_port_disable_raw_mode(struct ev3_output_port_data * data)
+static void ev3_output_port_disable_raw_mode(struct ev3_output_port_data * data)
 {
 	gpiod_unexport(data->pin1_gpio);
 	gpiod_unexport(data->pin2_gpio);
@@ -726,7 +726,7 @@ static void ev3_output_port_debug_init(struct ev3_output_port_data *data)
 	debugfs_create_u32("pwm_period", 0444, data->debug, &data->pwm->state.period);
 }
 
-int ev3_output_port_probe(struct platform_device *pdev)
+static int ev3_output_port_probe(struct platform_device *pdev)
 {
 	struct ev3_output_port_data *data;
 	int err;
@@ -854,7 +854,7 @@ err_release_iio_cb:
 	return err;
 }
 
-int ev3_output_port_remove(struct platform_device *pdev)
+static int ev3_output_port_remove(struct platform_device *pdev)
 {
 	struct ev3_output_port_data *data = dev_get_drvdata(&pdev->dev);
 

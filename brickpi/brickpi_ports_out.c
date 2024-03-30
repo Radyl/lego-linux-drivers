@@ -346,7 +346,7 @@ static unsigned brickpi_out_port_get_stop_actions(void *context)
 	return BIT(TM_STOP_ACTION_COAST) | BIT(TM_STOP_ACTION_HOLD);
 }
 
-struct tacho_motor_ops brickpi_out_port_tacho_motor_ops = {
+static const struct tacho_motor_ops brickpi_out_port_tacho_motor_ops = {
 	.get_position		= brickpi_out_port_get_position,
 	.set_position		= brickpi_out_port_set_position,
 	.get_duty_cycle		= brickpi_out_port_get_duty_cycle2,
@@ -372,7 +372,7 @@ struct tacho_motor_ops brickpi_out_port_tacho_motor_ops = {
 	.get_stop_actions	= brickpi_out_port_get_stop_actions,
 };
 
-int brickpi_out_port_register_motor(struct brickpi_out_port_data *out_port,
+static int brickpi_out_port_register_motor(struct brickpi_out_port_data *out_port,
 				    const struct device_type *device_type,
 				    const char *name)
 {
@@ -388,7 +388,7 @@ int brickpi_out_port_register_motor(struct brickpi_out_port_data *out_port,
 	return 0;
 }
 
-void brickpi_out_port_unregister_motor(struct brickpi_out_port_data *out_port)
+static void brickpi_out_port_unregister_motor(struct brickpi_out_port_data *out_port)
 {
 	if (out_port->motor) {
 		lego_device_unregister(out_port->motor);
