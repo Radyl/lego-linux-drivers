@@ -3,6 +3,8 @@
 menuconfig WEDO
 	tristate "LEGO WeDo support"
 	depends on USB
+	select NEW_LEDS
+	select LEDS_CLASS
 	select LEGOEV3_LEGO_SENSORS
 	select LEGO_DC_MOTORS
 	select LEGO_SERVO_MOTORS

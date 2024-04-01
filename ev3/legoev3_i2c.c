@@ -21,8 +21,7 @@
 #include <linux/completion.h>
 #include <linux/platform_device.h>
 
-#include <mach/legoev3-fiq.h>
-
+#include "../../arch/arm/mach-davinci/legoev3-fiq.h"
 #include "legoev3_i2c.h"
 
 struct i2c_legoev3_algo_data {

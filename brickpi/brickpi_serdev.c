@@ -635,8 +635,8 @@ static enum hrtimer_restart brickpi_poll_timer_function(struct hrtimer *timer)
 	return HRTIMER_RESTART;
 }
 
-static int brickpi_serdev_receive_buf(struct serdev_device *serdev,
-				      const unsigned char *buf, size_t count)
+static size_t brickpi_serdev_receive_buf(struct serdev_device *serdev,
+					 const u8 *buf, size_t count)
 {
 	struct brickpi_data *data = serdev_device_get_drvdata(serdev);
 

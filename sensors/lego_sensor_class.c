@@ -721,7 +721,7 @@ void unregister_lego_sensor(struct lego_sensor_device *sensor)
 }
 EXPORT_SYMBOL_GPL(unregister_lego_sensor);
 
-static int lego_sensor_dev_uevent(struct device *dev,
+static int lego_sensor_dev_uevent(const struct device *dev,
 				  struct kobj_uevent_env *env)
 {
 	struct lego_sensor_device *sensor = to_lego_sensor_device(dev);
@@ -742,14 +742,13 @@ static int lego_sensor_dev_uevent(struct device *dev,
 	return 0;
 }
 
-static char *lego_sensor_devnode(struct device *dev, umode_t *mode)
+static char *lego_sensor_devnode(const struct device *dev, umode_t *mode)
 {
 	return kasprintf(GFP_KERNEL, "lego-sensor/%s", dev_name(dev));
 }
 
 struct class lego_sensor_class = {
 	.name		= "lego-sensor",
-	.owner		= THIS_MODULE,
 	.dev_groups	= lego_sensor_class_groups,
 	.dev_uevent	= lego_sensor_dev_uevent,
 	.devnode	= lego_sensor_devnode,

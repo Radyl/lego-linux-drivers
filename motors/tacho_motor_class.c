@@ -299,7 +299,7 @@ static struct tacho_motor_value_names tacho_motor_states[NUM_TM_STATE] = {
 	[TM_STATE_STALLED]	= { "stalled" },
 };
 
-inline struct tacho_motor_device *to_tacho_motor(struct device *dev)
+inline struct tacho_motor_device *to_tacho_motor(const struct device *dev)
 {
 	return container_of(dev, struct tacho_motor_device, dev);
 }
@@ -1331,7 +1331,7 @@ void unregister_tacho_motor(struct tacho_motor_device *tm)
 }
 EXPORT_SYMBOL_GPL(unregister_tacho_motor);
 
-static int tacho_motor_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
+static int tacho_motor_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
 {
 	struct tacho_motor_device *tm = to_tacho_motor(dev);
 	int ret;
@@ -1351,7 +1351,7 @@ static int tacho_motor_dev_uevent(struct device *dev, struct kobj_uevent_env *en
 	return 0;
 }
 
-static char *tacho_motor_devnode(struct device *dev, umode_t *mode)
+static char *tacho_motor_devnode(const struct device *dev, umode_t *mode)
 {
 	return kasprintf(GFP_KERNEL, "tacho-motor/%s", dev_name(dev));
 }
@@ -1360,7 +1360,6 @@ static char *tacho_motor_devnode(struct device *dev, umode_t *mode)
 
 struct class tacho_motor_class = {
 	.name		= "tacho-motor",
-	.owner		= THIS_MODULE,
 	.dev_uevent	= tacho_motor_dev_uevent,
 	.devnode	= tacho_motor_devnode,
 };

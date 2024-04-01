@@ -164,7 +164,7 @@ devm_board_info_register(struct device *parent, struct board_info_desc *desc,
 }
 EXPORT_SYMBOL_GPL(devm_board_info_register);
 
-static int board_info_uevent(struct device *dev, struct kobj_uevent_env *env)
+static int board_info_uevent(const struct device *dev, struct kobj_uevent_env *env)
 {
 	struct board_info *info = dev_get_drvdata(dev);
 	const char *prop_name, *prop_value;
@@ -185,14 +185,14 @@ static int board_info_uevent(struct device *dev, struct kobj_uevent_env *env)
 	return 0;
 }
 
-static char *board_info_devnode(struct device *dev, umode_t *mode)
+static char *board_info_devnode(const struct device *dev, umode_t *mode)
 {
 	return kasprintf(GFP_KERNEL, "board-info/%s", dev_name(dev));
 }
 
 static int __init board_info_class_init(void)
 {
-	board_info_class = class_create(THIS_MODULE, "board-info");
+	board_info_class = class_create("board-info");
 	if (IS_ERR(board_info_class)) {
 		pr_err("unable to register board-info device class\n");
 		return PTR_ERR(board_info_class);

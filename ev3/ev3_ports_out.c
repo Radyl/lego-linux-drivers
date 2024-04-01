@@ -721,9 +721,9 @@ static void ev3_output_port_debug_init(struct ev3_output_port_data *data)
 	debugfs_create_u32("pin5_mv", 0444, data->debug, &data->pin5_mv);
 	debugfs_create_u32("pin5_float_mv", 0444, data->debug, &data->pin5_float_mv);
 	debugfs_create_u32("pin5_low_mv", 0444, data->debug, &data->pin5_low_mv);
-	debugfs_create_u32("pwm_duty_cycle", 0444, data->debug,
+	debugfs_create_u64("pwm_duty_cycle", 0444, data->debug,
 			   &data->pwm->state.duty_cycle);
-	debugfs_create_u32("pwm_period", 0444, data->debug, &data->pwm->state.period);
+	debugfs_create_u64("pwm_period", 0444, data->debug, &data->pwm->state.period);
 }
 
 static int ev3_output_port_probe(struct platform_device *pdev)

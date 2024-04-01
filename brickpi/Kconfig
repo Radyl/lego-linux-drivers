@@ -1,5 +1,7 @@
 menuconfig BRICKPI
 	tristate "Dexter Industries BrickPi support"
+	select NEW_LEDS
+	select LEDS_CLASS
 	select SERIAL_DEV_BUS
 	help
 	  Say Y here if you want to use Dexter Industries BrickPi. This does not

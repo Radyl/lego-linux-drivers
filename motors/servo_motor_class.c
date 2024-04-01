@@ -504,7 +504,7 @@ void unregister_servo_motor(struct servo_motor_device *servo)
 }
 EXPORT_SYMBOL_GPL(unregister_servo_motor);
 
-static int servo_motor_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
+static int servo_motor_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
 {
 	struct servo_motor_device *servo = to_servo_motor_device(dev);
 	int ret;
@@ -523,14 +523,13 @@ static int servo_motor_dev_uevent(struct device *dev, struct kobj_uevent_env *en
 	return 0;
 }
 
-static char *servo_motor_devnode(struct device *dev, umode_t *mode)
+static char *servo_motor_devnode(const struct device *dev, umode_t *mode)
 {
 	return kasprintf(GFP_KERNEL, "servo-motor/%s", dev_name(dev));
 }
 
 struct class servo_motor_class = {
 	.name		= "servo-motor",
-	.owner		= THIS_MODULE,
 	.dev_groups	= servo_motor_class_groups,
 	.dev_uevent	= servo_motor_dev_uevent,
 	.devnode	= servo_motor_devnode,

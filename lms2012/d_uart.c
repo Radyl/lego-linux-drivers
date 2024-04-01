@@ -40,8 +40,6 @@
 
 #include "lms2012.h"
 
-#define N_D_UART		27 /* line dicipline no. */
-
 #define DEBUG_UART		(-1)    // must match settings in lms2012
 
 #define LOWEST_BITRATE		  2400  //  Lowest possible bit rate (always used for sync and info)  [b/S]
@@ -2014,8 +2012,8 @@ static void d_uart_close(struct tty_struct *tty)
 }
 
 static struct tty_ldisc_ops d_uart_ldisc = {
-	.magic			= TTY_LDISC_MAGIC,
 	.name			= "n_d_uart",
+	.num			= N_D_UART,
 	.open			= d_uart_open,
 	.close			= d_uart_close,
 	.ioctl			= tty_mode_ioctl,
@@ -2033,7 +2031,7 @@ static int d_uart_probe(struct platform_device *pdev)
 	 * Technically, this should be in module init, but since there is only
 	 * on device, it should be safe to register the line discipline here.
 	 */
-	ret = tty_register_ldisc(N_D_UART, &d_uart_ldisc);
+	ret = tty_register_ldisc(&d_uart_ldisc);
 	if (ret) {
 		pr_err("Could not register d_uart line discipline. (%d)\n", ret);
 		Device1Exit();
@@ -2047,7 +2045,7 @@ static int d_uart_probe(struct platform_device *pdev)
 
 static int d_uart_remove(struct platform_device *pdev)
 {
-	tty_unregister_ldisc(N_D_UART);
+	tty_unregister_ldisc(&d_uart_ldisc);
 	Device1Exit();
 
 	pr_info("d_uart removed\n");

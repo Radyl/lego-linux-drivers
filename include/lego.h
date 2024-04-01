@@ -39,7 +39,7 @@ struct lego_device {
 	const struct lego_device_id *entry_id;
 };
 
-static inline struct lego_device *to_lego_device(struct device *dev)
+static inline struct lego_device *to_lego_device(const struct device *dev)
 {
 	return dev ? container_of(dev, struct lego_device, dev) : NULL;
 }
@@ -60,7 +60,7 @@ struct lego_device_driver {
 };
 
 static inline struct lego_device_driver
-*to_lego_device_driver(struct device_driver *drv)
+*to_lego_device_driver(const struct device_driver *drv)
 {
 	return drv ? container_of(drv, struct lego_device_driver, driver) : NULL;
 }

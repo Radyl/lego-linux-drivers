@@ -645,7 +645,7 @@ void unregister_dc_motor(struct dc_motor_device *dc)
 }
 EXPORT_SYMBOL_GPL(unregister_dc_motor);
 
-static int dc_motor_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
+static int dc_motor_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
 {
 	struct dc_motor_device *motor = to_dc_motor_device(dev);
 	int ret;
@@ -664,14 +664,13 @@ static int dc_motor_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
 	return 0;
 }
 
-static char *dc_motor_devnode(struct device *dev, umode_t *mode)
+static char *dc_motor_devnode(const struct device *dev, umode_t *mode)
 {
 	return kasprintf(GFP_KERNEL, "dc-motor/%s", dev_name(dev));
 }
 
 struct class dc_motor_class = {
 	.name		= "dc-motor",
-	.owner		= THIS_MODULE,
 	.dev_groups	= dc_motor_class_groups,
 	.dev_uevent	= dc_motor_dev_uevent,
 	.devnode	= dc_motor_devnode,

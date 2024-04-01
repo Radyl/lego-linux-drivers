@@ -55,7 +55,7 @@
 #include <sound/pcm.h>
 
 #if IS_ENABLED(CONFIG_LEGOEV3_FIQ)
-#include <mach/legoev3-fiq.h>
+#include "../../arch/arm/mach-davinci/legoev3-fiq.h"
 #endif
 
 #define DRIVER_NAME	"snd-legoev3"
@@ -479,18 +479,19 @@ static int snd_legoev3_new_pcm(struct snd_legoev3 *chip)
 	err = snd_pcm_new(chip->card, "PWM", 0, 1, 0, &pcm);
 	if (err < 0)
 		return err;
-	pcm->private_data = chip;
-	strlcpy(pcm->name, chip->card->shortname, sizeof(pcm->name));
+
+	err = strscpy(pcm->name, chip->card->shortname, sizeof(pcm->name));
+	if (err < 0)
+		return err;
+
 	chip->pcm = pcm;
+	pcm->private_data = chip;
 
 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,
 		&snd_legoev3_playback_ops);
 
-	err = snd_pcm_lib_preallocate_pages_for_all(pcm,
-		SNDRV_DMA_TYPE_CONTINUOUS, snd_dma_continuous_data(GFP_KERNEL),
-		BUFFER_SIZE, BUFFER_SIZE);
-	if (err < 0)
-		return err;
+	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
+					      NULL, BUFFER_SIZE, BUFFER_SIZE);
 
 	return 0;
 }
@@ -686,8 +687,14 @@ static int snd_legoev3_probe(struct platform_device *pdev)
 		goto err_snd_card_new;
 	}
 
-	strlcpy(card->driver, DRIVER_NAME, sizeof(card->driver));
-	strlcpy(card->shortname, label, sizeof(card->shortname));
+	err = strscpy(card->driver, DRIVER_NAME, sizeof(card->driver));
+	if (err < 0)
+		goto err_snd_card_new;
+
+	err = strscpy(card->shortname, label, sizeof(card->shortname));
+	if (err < 0)
+		goto err_snd_card_new;
+
 	sprintf(card->longname, "%s connected to %s", card->shortname,
 		dev_name(pwm->chip->dev));
 

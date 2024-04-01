@@ -14,12 +14,13 @@
  */
 
 #include <linux/device.h>
-#include <linux/module.h>
-#include <linux/string.h>
-#include <linux/slab.h>
 #include <linux/err.h>
 #include <linux/gpio.h>
 #include <linux/ioport.h>
+#include <linux/module.h>
+#include <linux/of.h>
+#include <linux/slab.h>
+#include <linux/string.h>
 
 #include <lego.h>
 #include <lego_port_class.h>
@@ -197,7 +198,7 @@ static int lego_bus_match(struct device *dev, struct device_driver *drv)
 	return !strcmp(ldev->name, drv->name);
 }
 
-static int lego_bus_uevent(struct device *dev, struct kobj_uevent_env *env)
+static int lego_bus_uevent(const struct device *dev, struct kobj_uevent_env *env)
 {
 	struct lego_device *ldev = to_lego_device(dev);
 	int err;

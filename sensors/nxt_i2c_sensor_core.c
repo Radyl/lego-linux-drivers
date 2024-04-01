@@ -207,18 +207,20 @@ static void nxt_i2c_sensor_poll_work(struct work_struct *work)
 			mode_info->raw_data);
 }
 
-static int nxt_i2c_sensor_probe(struct i2c_client *client,
-				const struct i2c_device_id *id)
+static struct i2c_device_id nxt_i2c_sensor_id_table[];
+
+static int nxt_i2c_sensor_probe(struct i2c_client *client)
 {
 	struct nxt_i2c_sensor_platform_data *pdata = client->dev.platform_data;
 	struct nxt_i2c_sensor_data *data;
 	struct lego_port_device *in_port = NULL;
 	const struct nxt_i2c_sensor_info *sensor_info;
-	const struct i2c_device_id *i2c_dev_id = id;
+	const struct i2c_device_id *i2c_dev_id;
 	char version[NXT_I2C_ID_STR_LEN + 1] = { 0 };
 	size_t mode_info_size;
 	int err, i;
 
+	i2c_dev_id = i2c_match_id(nxt_i2c_sensor_id_table, client);
 	sensor_info = &nxt_i2c_sensor_defs[i2c_dev_id->driver_data];
 
 	if (pdata)
@@ -320,7 +322,7 @@ err_kalloc_mode_info:
 	return err;
 }
 
-static int nxt_i2c_sensor_remove(struct i2c_client *client)
+static void nxt_i2c_sensor_remove(struct i2c_client *client)
 {
 	struct nxt_i2c_sensor_data *data = i2c_get_clientdata(client);
 
@@ -335,11 +337,7 @@ static int nxt_i2c_sensor_remove(struct i2c_client *client)
 	unregister_lego_sensor(&data->sensor);
 	kfree(data->sensor.mode_info);
 	kfree(data);
-
-	return 0;
 }
-
-static struct i2c_device_id nxt_i2c_sensor_id_table[];
 
 static int nxt_i2c_sensor_detect_lego_power(struct i2c_client *client)
 {

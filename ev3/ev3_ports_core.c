@@ -58,10 +58,6 @@ static int ev3_ports_probe(struct platform_device *pdev)
 	char con_name[20];
 	int err;
 
-	/* FIXME: this is bad if there is no console= kernel parameter */
-	if (!console_drivers)
-		return -EPROBE_DEFER;
-
 	for_each_available_child_of_node(pdev->dev.of_node, child) {
 		/* ev3dev,tty-name property is optional */
 		err = of_property_read_string(child, "ev3dev,tty-name",
@@ -74,6 +70,7 @@ static int ev3_ports_probe(struct platform_device *pdev)
 		 * is being used as a console, then disable that node so we
 		 * don't interfere with the console
 		 */
+		console_list_lock();
 		for_each_console(con) {
 			snprintf(con_name, 20, "%s%d", con->name, con->index);
 			if (strcmp(tty_name, con_name) == 0) {
@@ -83,6 +80,7 @@ static int ev3_ports_probe(struct platform_device *pdev)
 				ev3_ports_disable_node(child);
 			}
 		}
+		console_list_unlock();
 	}
 
 	err = of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);

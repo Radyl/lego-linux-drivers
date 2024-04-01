@@ -125,6 +125,8 @@ config LEGO_SERVO_MOTORS
 config LEGO_DC_MOTORS
 	tristate "DC motor support"
 	default y
+	select NEW_LEDS
+	select LEDS_CLASS
 	help
 	  Select Y to enable support for DC motors (includes LEGO Power
 	  Functions motors).

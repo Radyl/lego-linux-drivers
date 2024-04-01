@@ -263,7 +263,7 @@ void lego_port_unregister(struct lego_port_device *port)
 }
 EXPORT_SYMBOL_GPL(lego_port_unregister);
 
-static int lego_port_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
+static int lego_port_dev_uevent(const struct device *dev, struct kobj_uevent_env *env)
 {
 	struct lego_port_device *lego_port = to_lego_port_device(dev);
 	int ret;
@@ -283,14 +283,13 @@ static int lego_port_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
 	return 0;
 }
 
-static char *lego_port_devnode(struct device *dev, umode_t *mode)
+static char *lego_port_devnode(const struct device *dev, umode_t *mode)
 {
 	return kasprintf(GFP_KERNEL, "lego-port/%s", dev_name(dev));
 }
 
 struct class lego_port_class = {
 	.name		= "lego-port",
-	.owner		= THIS_MODULE,
 	.dev_groups	= lego_port_class_groups,
 	.dev_uevent	= lego_port_dev_uevent,
 	.devnode	= lego_port_devnode,

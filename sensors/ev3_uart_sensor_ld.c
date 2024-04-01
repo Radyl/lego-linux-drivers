@@ -61,10 +61,6 @@
 #define debug_pr(fmt, ...) while(0) { }
 #endif
 
-#ifndef N_LEGOEV3
-#define N_LEGOEV3 29
-#endif
-
 #define EV3_UART_MAX_DATA_SIZE		32
 /* extra bytes for: main command byte, INFO command byte, final checksum */
 #define EV3_UART_MAX_MESSAGE_SIZE	(EV3_UART_MAX_DATA_SIZE + 3)
@@ -278,8 +274,7 @@ static int ev3_uart_set_mode(void *context, const u8 mode)
 {
 	struct tty_struct *tty = context;
 	struct ev3_uart_port_data *port;
-	const int data_size = 3;
-	u8 data[data_size];
+	u8 data[3];
 	int retries = 10;
 	int ret;
 
@@ -294,7 +289,8 @@ static int ev3_uart_set_mode(void *context, const u8 mode)
 	if (!completion_done(&port->set_mode_completion))
 		return -EBUSY;
 
-	data[0] = ev3_uart_set_msg_hdr(EV3_UART_MSG_TYPE_CMD, data_size - 2,
+	data[0] = ev3_uart_set_msg_hdr(EV3_UART_MSG_TYPE_CMD,
+				       ARRAY_SIZE(data) - 2,
 				       EV3_UART_CMD_SELECT);
 	data[1] = mode;
 	data[2] = 0xFF ^ data[0] ^ data[1];
@@ -303,7 +299,7 @@ static int ev3_uart_set_mode(void *context, const u8 mode)
 	reinit_completion(&port->set_mode_completion);
 	while (retries--) {
 		set_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
-		ret = tty->ops->write(tty, data, data_size);
+		ret = tty->ops->write(tty, data, ARRAY_SIZE(data));
 		if (ret < 0)
 			return ret;
 
@@ -462,8 +458,8 @@ static enum hrtimer_restart ev3_uart_keep_alive_timer_callback(struct hrtimer *t
 	return HRTIMER_RESTART;
 }
 
-static int ev3_uart_receive_buf2(struct tty_struct *tty,
-				 const unsigned char *cp, char *fp, int count)
+static size_t ev3_uart_receive_buf2(struct tty_struct *tty,
+				    const u8 *cp, const u8 *fp, size_t count)
 {
 	struct ev3_uart_port_data *port = tty->disc_data;
 	u8 message[EV3_UART_MAX_MESSAGE_SIZE];
@@ -500,7 +496,7 @@ static int ev3_uart_receive_buf2(struct tty_struct *tty,
 	 * for a valid TYPE command.
 	 */
 	while (!port->synced) {
-		int num = min(count - pos, 3 - port->partial_msg_size);
+		int num = umin(count - pos, 3 - port->partial_msg_size);
 
 		/* we are out of new data */
 		if (num <= 0)
@@ -1045,7 +1041,6 @@ static int ev3_uart_open(struct tty_struct *tty)
 	tty->ops->tiocmset(tty, 0, ~0); /* clear all */
 
 	tty->receive_room = 65536;
-	tty->port->low_latency = 1; // does not do anything since kernel 3.12
 
 	/* flush any existing data in the buffer */
 	if (tty->ldisc->ops->flush_buffer)
@@ -1074,23 +1069,17 @@ static void ev3_uart_close(struct tty_struct *tty)
 	kfree(port);
 }
 
-static int ev3_uart_ioctl(struct tty_struct *tty, struct file *file,
-			  unsigned int cmd, unsigned long arg)
-{
-	return tty_mode_ioctl(tty, file, cmd, arg);
-}
-
 static void ev3_uart_write_wakeup(struct tty_struct *tty)
 {
 	debug_pr("%s\n", __func__);
 }
 
 static struct tty_ldisc_ops ev3_uart_ldisc = {
-	.magic			= TTY_LDISC_MAGIC,
 	.name			= "n_legoev3",
+	.num			= N_LEGOEV3,
 	.open			= ev3_uart_open,
 	.close			= ev3_uart_close,
-	.ioctl			= ev3_uart_ioctl,
+	.ioctl			= tty_mode_ioctl,
 	.receive_buf2		= ev3_uart_receive_buf2,
 	.write_wakeup		= ev3_uart_write_wakeup,
 	.owner			= THIS_MODULE,
@@ -1100,7 +1089,7 @@ static int __init ev3_uart_init(void)
 {
 	int err;
 
-	err = tty_register_ldisc(N_LEGOEV3, &ev3_uart_ldisc);
+	err = tty_register_ldisc(&ev3_uart_ldisc);
 	if (err) {
 		pr_err("Could not register EV3 UART sensor line discipline. (%d)\n",
 			err);
@@ -1115,12 +1104,7 @@ module_init(ev3_uart_init);
 
 static void __exit ev3_uart_exit(void)
 {
-	int err;
-
-	err = tty_unregister_ldisc(N_LEGOEV3);
-	if (err)
-		pr_err("Could not unregister EV3 UART sensor line discipline. (%d)\n",
-			err);
+	tty_unregister_ldisc(&ev3_uart_ldisc);
 }
 module_exit(ev3_uart_exit);
 
