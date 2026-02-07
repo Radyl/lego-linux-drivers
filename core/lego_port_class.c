@@ -236,7 +236,7 @@ int lego_port_register(struct lego_port_device *port,
 {
 	int err;
 
-	if (!port || !port->name || !port->address || !type || !parent)
+	if (!port || !port->name || !type || !parent)
 		return -EINVAL;
 
 	port->dev.release = lego_port_release;

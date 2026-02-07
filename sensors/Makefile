@@ -1,5 +1,5 @@
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 # Sensor class
 obj-$(CONFIG_LEGO_SENSORS)		+= lego_sensor_class.o

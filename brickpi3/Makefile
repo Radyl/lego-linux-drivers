@@ -1,6 +1,6 @@
 # Dexter Industries BrickPi3
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 brickpi3-objs := brickpi3_i2c.o brickpi3_iio.o brickpi3_leds.o \
 		 brickpi3_ports_in.o brickpi3_ports_out.o brickpi3_spi.o \

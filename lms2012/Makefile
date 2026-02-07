@@ -1,5 +1,5 @@
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 obj-$(CONFIG_LMS2012_COMPAT)	+= battery.o
 obj-$(CONFIG_LMS2012_COMPAT)	+= d_analog.o

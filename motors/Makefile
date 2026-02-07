@@ -1,5 +1,5 @@
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 # Motor classes
 tacho_motor-objs := tacho_motor_class.o tacho_motor_helper.o

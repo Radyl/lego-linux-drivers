@@ -2,7 +2,7 @@
 # Makefile for the LEGO WeDo driver (if driver is inside kernel tree).
 #
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 obj-$(CONFIG_WEDO) += wedo.o
 

@@ -41,8 +41,6 @@
 #include <linux/platform_device.h>
 #include <linux/slab.h>
 
-#include <asm/system_info.h>
-
 #include "board_info.h"
 
 static const enum board_info_property rpi_board_properties[] = {
@@ -103,8 +101,8 @@ static int rpi_board_probe(struct platform_device *pdev)
 	data->board.num_properties = ARRAY_SIZE(rpi_board_properties);
 	data->board.get_property = rpi_board_get_property;
 
-	snprintf(data->hw_rev, RPI_BOARD_HW_REV_SIZE, "%04X", system_rev);
-	data->serial_num = system_serial;
+	snprintf(data->hw_rev, RPI_BOARD_HW_REV_SIZE, "%04X", 0xABCD);
+	data->serial_num = "MODBRICK";
 
 	root = of_find_node_by_path("/");
 	of_property_read_string(root, "model", &data->model);

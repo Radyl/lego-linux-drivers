@@ -1,5 +1,5 @@
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 # mindsensors.com PiStorms
 

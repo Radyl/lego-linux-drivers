@@ -1,6 +1,6 @@
 # Makefile for FatcatLab EVB
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 # evb_analog currently not used in favor of ti-ads97xx
 obj-$(CONFIG_FATCATLAB_EVB)			+= evb_battery.o

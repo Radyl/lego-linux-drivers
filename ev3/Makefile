@@ -1,6 +1,6 @@
 # EV3
 
-ccflags-y += -I $(srctree)/drivers/lego/include
+
 
 obj-$(CONFIG_LEGOEV3_BOARD)			+= ev3_board.o
 obj-$(CONFIG_LEGOEV3_I2C)			+= legoev3_i2c.o

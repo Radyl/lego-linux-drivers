@@ -61,6 +61,10 @@
 #define debug_pr(fmt, ...) while(0) { }
 #endif
 
+#ifndef N_LEGOEV3
+#define N_LEGOEV3 29
+#endif
+
 #define EV3_UART_MAX_DATA_SIZE		32
 /* extra bytes for: main command byte, INFO command byte, final checksum */
 #define EV3_UART_MAX_MESSAGE_SIZE	(EV3_UART_MAX_DATA_SIZE + 3)
